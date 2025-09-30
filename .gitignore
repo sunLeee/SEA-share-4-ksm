@@ -63,11 +63,11 @@ logs/
 .env
 .env.local
 
-# Data files
-data/*.csv
-data/*.xlsx
-data/*.json
-!data/.gitkeep
+# # Data files
+# data/*.csv
+# data/*.xlsx
+# data/*.json
+# !data/.gitkeep
 
 # Model files
 models/*.pkl
