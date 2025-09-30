@@ -1,0 +1,110 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.hypothesis/
+
+# Logs
+*.log
+logs/
+
+# Database
+*.db
+*.sqlite3
+
+# Environment variables
+.env
+.env.local
+
+# Data files
+data/*.csv
+data/*.xlsx
+data/*.json
+!data/.gitkeep
+
+# Model files
+models/*.pkl
+models/*.h5
+models/*.pt
+!models/.gitkeep
+
+# Output files
+output/*.png
+output/*.pdf
+output/*.svg
+results/
+temp_output/
+test_output/
+!output/.gitkeep
+!results/.gitkeep
+
+# Generated configuration files
+config/*.yaml
+config/*.yml
+!config/*example*
+!config/*template*
+
+# Notebook outputs
+notebooks/*.csv
+notebooks/output/
+notebooks/temp/
+
+# Test files
+test_*.py
+*_test.py
+output/analysis_results.csv
+output/onboard_time_city.csv
+output/onboard_time_rural.csv
+output/total_time_city.csv
+output/total_time_rural.csv
+output/waiting_time_city.csv
+output/waiting_time_rural.csv
+output/walking_time_city.csv
+output/walking_time_rural.csv
