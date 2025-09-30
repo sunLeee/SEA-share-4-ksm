@@ -194,8 +194,8 @@ def get_default_config():
             'plot_types': ['boxplot', 'violin', 'boxen'],
             'dpi': 300,
             'show_outliers': False,
-            'show_mean': True,
-            'show_mean_value': True,
+            'show_mean': False,
+            'show_mean_value': False,
             'clip_percentile': 0.95,
             'mean_position_strategy': 'adaptive',
             'create_forest_plot': True
@@ -280,12 +280,12 @@ def interactive_config():
         config['visualization']['show_outliers'] = (show_outliers == 'Y')
 
         # 평균값 표시
-        show_mean = input(f"평균값 표시 (Y/N) [Y]: ").strip().upper()
-        config['visualization']['show_mean'] = (show_mean != 'N')
+        show_mean = input(f"평균값 표시 (Y/N) [N]: ").strip().upper()
+        config['visualization']['show_mean'] = (show_mean == 'Y')
 
         # 평균값 숫자 표시
-        show_mean_value = input(f"평균값 숫자 표시 (Y/N) [Y]: ").strip().upper()
-        config['visualization']['show_mean_value'] = (show_mean_value != 'N')
+        show_mean_value = input(f"평균값 숫자 표시 (Y/N) [N]: ").strip().upper()
+        config['visualization']['show_mean_value'] = (show_mean_value == 'Y')
 
         # 클리핑 백분위수
         clip_input = input(f"데이터 클리핑 백분위수 (0.9-1.0) [0.95]: ").strip()
