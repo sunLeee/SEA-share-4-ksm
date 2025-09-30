@@ -76,9 +76,7 @@ models/*.pt
 !models/.gitkeep
 
 # Output files
-output/*.png
-output/*.pdf
-output/*.svg
+# NOTE: PNG/PDF/SVG files in output/ are tracked for README.md documentation
 results/
 temp_output/
 test_output/
