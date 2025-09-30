@@ -1,224 +1,106 @@
-# 셔클 효과 분석 패키지 🚌📊
+# 셔클 효과 분석 패키지
 
-**고성능 데이터사이언스 분석을 위한 셔클(수요응답형 교통서비스) 도입 효과 분석 도구**
+**셔클(수요응답형 교통서비스) 도입 효과 분석 도구**
 
-[![Python Version](https://img.shields.io/badge/python-3.8%2B-blue)](https://www.python.org/downloads/)
-[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
-[![Code Style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+## 개요
 
-## 🚀 주요 특징
+본 패키지는 셔클 도입 전후의 교통 데이터를 분석하여 정량적 효과를 측정하는 전문 분석 도구입니다. 통계적 유의성 검증, 효과 크기 계산, 고급 시각화 기능을 제공합니다.
 
-### 📈 성능 최적화
-- **벡터화 연산**: NumPy/Pandas 벡터화로 **3-5배 속도 향상**
-- **병렬 처리**: 멀티프로세싱으로 CPU 활용률 극대화
-- **메모리 최적화**: 대용량 데이터 처리 시 **50% 메모리 사용량 감소**
+## 주요 기능
 
-### 🔬 고급 통계 분석
-- **가설검정**: t-test, Wilcoxon, 부트스트랩 검정
-- **효과 크기**: Cohen's d, 상관분석, 신뢰구간 추정
-- **강건 통계**: 이상값에 robust한 절사평균, MAD 활용
+### 통계 분석
+- **가설 검정**: Paired t-test, Wilcoxon signed-rank test, Bootstrap test
+- **효과 크기 측정**: Cohen's d 계산 및 해석
+- **신뢰구간 추정**: 99% 신뢰구간 기반 분석
+- **강건 통계**: 절사평균, 중앙절대편차(MAD) 활용
 
-### 📊 고급 시각화 기능
-- **다중 차트**: 박스플롯, 바이올린, Boxen 플롯 지원
-- **완전한 사용자 제어**:
-  - 플롯 타입 선택 (개별 또는 조합)
-  - 그래프 크기 및 해상도 조정 (300-600 DPI)
-  - 출력 형식 선택 (PNG, PDF, SVG)
-  - 이상값 표시 옵션
-  - 평균값 위치 전략 (adaptive/fixed/above_max)
-  - 데이터 클리핑 백분위수 조정
-- **고품질 출력**: 논문급 품질의 벡터 그래픽 지원
+### 시각화
+- **다중 플롯 타입**: Boxplot, Violin plot, Boxen plot
+- **Forest Plot**: 효과 크기와 신뢰구간 시각화
+- **고품질 출력**: PNG, PDF, SVG 형식 지원 (300-600 DPI)
+- **세밀한 제어**: 이상값 표시, 평균값 위치, 데이터 클리핑 옵션
 
-### ⚙️ 대화형 설정 관리
-- **Interactive 모드**: 모든 옵션을 실시간으로 커스터마이즈
-- **기본값 지원**: 엔터만 눌러도 최적화된 기본값 사용
-- **즉시 피드백**: 설정 완료 후 적용된 옵션 확인
-- **자동 디렉토리 생성**: 출력 경로 자동 생성
+### 데이터 처리
+- **자동 전처리**: 결측값 제거, 단위 변환 (초→분)
+- **지역별 분석**: 도시/농어촌 지역 구분 분석
+- **카테고리별 분석**: 도보시간, 탑승시간, 대기시간, 총 이동시간
 
-## 📦 설치 방법
+## 설치 방법
 
 ### 필수 요구사항
 - Python 3.8 이상
-- 최소 4GB RAM (대용량 데이터 처리 시 8GB 권장)
+- 최소 4GB RAM 권장
 
-### 기본 설치
+### 패키지 설치
 ```bash
-# 저장소 클론
-git clone https://github.com/your-username/shucle-effect-analysis.git
+# 프로젝트 디렉토리로 이동
 cd shucle-effect-analysis
 
 # 의존성 설치
 pip install -r requirements.txt
-
-# 개발 모드 설치 (권장)
-pip install -e .
 ```
 
-### 가상환경 사용 (권장)
+## 사용 방법
+
+### 기본 분석 실행
 ```bash
-# 가상환경 생성
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-# venv\\Scripts\\activate   # Windows
-
-# 패키지 설치
-pip install -e ".[dev]"  # 개발용 도구 포함
-```
-
-## 🎯 빠른 시작
-
-### 1. 기본 분석 실행
-```bash
-# 기본 설정으로 빠른 실행
+# 기본 설정으로 실행
 python scripts/main.py
 
-# 대화형 커스터마이제이션 모드 (권장)
+# 대화형 모드로 실행 (권장)
 python scripts/main.py --interactive
 ```
 
-### 2. 대화형 모드 사용법
-대화형 모드에서는 모든 분석 옵션을 커스터마이즈할 수 있습니다:
+### 대화형 모드 사용법
+
+대화형 모드에서는 모든 분석 옵션을 직접 설정할 수 있습니다. 각 항목에서 엔터를 누르면 기본값이 사용됩니다.
 
 ```bash
 python scripts/main.py --interactive
+```
 
-🔧 대화형 설정 모드
-엔터를 누르면 기본값이 사용됩니다.
+**설정 항목:**
 
-데이터 파일 경로 [./data/shucle_analysis_dataset_20250929.csv]:
-출력 디렉토리 [./output]: ./my_results
-플롯 저장 (Y/N) [Y]:
-플롯 표시 (Y/N) [N]:
+1. **데이터 파일 경로**: 분석할 CSV 파일 위치
+2. **출력 디렉토리**: 결과 파일 저장 위치
+3. **플롯 저장 여부**: 그래프 이미지 파일로 저장 (Y/N)
+4. **플롯 표시 여부**: 그래프를 화면에 표시 (Y/N)
+
+**시각화 세부 설정:**
+- 플롯 타입: boxplot, violin, boxen 중 선택 (쉼표로 구분)
+- 그래프 크기: 가로x세로 픽셀 (예: 15x8)
+- 출력 형식: png, pdf, svg 중 선택
+- 이미지 해상도: DPI 설정 (기본 300, 고품질 600)
+
+**고급 시각화 옵션:**
+- 이상값 표시 여부
+- 평균값 선 표시 여부
+- 평균값 숫자 표시 여부
+- 데이터 클리핑 백분위수 (0.9-1.0)
+- 평균값 위치 전략 (adaptive/fixed_percentage/above_max)
+
+**예시:**
+```
+데이터 파일 경로 [./data/shucle_analysis_dataset_20250929.csv]: [엔터]
+출력 디렉토리 [./output]: ./results
+플롯 저장 (Y/N) [Y]: [엔터]
+플롯 표시 (Y/N) [N]: [엔터]
 
 📊 시각화 세부 설정:
 플롯 타입 (쉼표로 구분) [boxplot, violin, boxen]: boxplot,violin
-그래프 크기 (가로x세로) [15x8]: 12x6
+그래프 크기 (가로x세로) [15x8]: [엔터]
 출력 형식 (png/pdf/svg) [png]: pdf
 이미지 해상도 DPI [300]: 600
 
 🎨 고급 시각화 옵션:
-이상값 표시 (Y/N) [N]: Y
-평균값 표시 (Y/N) [Y]:
-평균값 숫자 표시 (Y/N) [Y]:
-데이터 클리핑 백분위수 (0.9-1.0) [0.95]: 0.90
-평균값 위치 전략 (adaptive/fixed_percentage/above_max) [adaptive]:
-
-✅ 설정 완료!
-📊 플롯 타입: boxplot, violin
-📐 그래프 크기: 12x6
-🎯 해상도: 600 DPI
-📁 출력: ./my_results
+이상값 표시 (Y/N) [N]: [엔터]
+평균값 표시 (Y/N) [Y]: [엔터]
+평균값 숫자 표시 (Y/N) [Y]: [엔터]
+데이터 클리핑 백분위수 (0.9-1.0) [0.95]: [엔터]
+평균값 위치 전략 (adaptive/fixed_percentage/above_max) [adaptive]: [엔터]
 ```
 
-### 3. Python에서 직접 사용
-```python
-from src import StatisticsAnalyzer, create_grouped_boxplot
-import pandas as pd
-
-# 데이터 로드
-df = pd.read_csv('data/your_data.csv')
-
-# 통계 분석
-analyzer = StatisticsAnalyzer(alpha=0.01)
-result = analyzer.analyze_improvement_effect(
-    baseline_data=df['public_time'].values,
-    improved_data=df['shuttle_time'].values
-)
-
-print(f"p-value: {result.statistical_significance.p_value:.2e}")
-print(f"Cohen's d: {result.effect_size:.3f}")
-```
-
-## 📊 성능 벤치마크
-
-| 작업 | 기존 방식 | 최적화 버전 | 개선율 |
-|------|----------|------------|--------|
-| 데이터 전처리 (100만행) | 45초 | 12초 | **73% 향상** |
-| 시각화 생성 (3개 타입) | 18초 | 5초 | **72% 향상** |
-| 통계 분석 (고급) | 25초 | 8초 | **68% 향상** |
-| **총 분석 시간** | **88초** | **25초** | **평균 72% 향상** |
-
-### 리소스 최적화
-- **메모리 사용량**: 850MB → 420MB (**50% 감소**)
-- **CPU 활용률**: 25% → 90% (**3.6배 증가**)
-
-## 🛠️ 주요 모듈
-
-### 📈 시각화 모듈 (`src/visualization.py`)
-```python
-from src.visualization import create_grouped_boxplot
-
-# 고성능 박스플롯 생성
-fig, ax = create_grouped_boxplot(
-    data_dict=processed_data,
-    title="셔클 도입 효과 분석",
-    mean_position_strategy='adaptive',
-    clip_percentile=0.95
-)
-```
-
-### 🔬 통계 분석 모듈 (`src/statistics_analyzer.py`)
-```python
-from src.statistics_analyzer import StatisticsAnalyzer
-
-analyzer = StatisticsAnalyzer(alpha=0.01)
-result = analyzer.analyze_improvement_effect(
-    baseline_data, improved_data, "분석명"
-)
-```
-
-### 💾 데이터 처리 모듈 (`src/data_processor.py`)
-```python
-from src.data_processor import ShuttleDataProcessor
-
-processor = ShuttleDataProcessor()
-cleaned_data = processor.remove_outliers(data, method='iqr')
-```
-
-### ⚙️ 설정 관리 모듈 (`src/config_manager.py`)
-```python
-from src.config_manager import ConfigManager
-
-config_manager = ConfigManager()
-config = config_manager.load_config('config.yaml')
-```
-
-## 📝 설정 예시
-
-### 기본 설정 (`config.yaml`)
-```yaml
-data:
-  path: './data/shucle_analysis_dataset.csv'
-  zone_types: ['도시', '농어촌']
-
-analysis:
-  statistical_test:
-    alpha: 0.01
-    bootstrap_iterations: 10000
-    confidence_level: 0.99
-
-visualization:
-  common_settings:
-    mean_position_strategy: 'adaptive'
-    clip_percentile: 0.95
-    figsize: [15, 8]
-    dpi: 300
-
-output:
-  save_plots: true
-  show_plots: false
-  directory: './output'
-  format: 'png'
-```
-
-### 환경변수 지원
-```bash
-export SHUCLE_ALPHA=0.05
-export SHUCLE_DPI=600
-export SHUCLE_OUTPUT_DIR=./results
-```
-
-## 🎛️ 커스터마이제이션 옵션
+## 커스터마이제이션 옵션
 
 ### 시각화 옵션
 | 옵션 | 설명 | 기본값 | 선택 가능한 값 |

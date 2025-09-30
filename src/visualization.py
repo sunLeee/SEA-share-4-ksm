@@ -1072,11 +1072,8 @@ def create_forest_plot(
     for category in categories:
         result = stats_results[category]
 
-        # 평균 차이 계산
-        mean_diff = (
-            result.baseline_stats['mean'] -
-            result.improved_stats['mean']
-        )
+        # 평균 차이 계산 (ImprovementAnalysis 구조)
+        mean_diff = result.absolute_improvement['mean']
         mean_diffs.append(mean_diff)
 
         # 신뢰구간
