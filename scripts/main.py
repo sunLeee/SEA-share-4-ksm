@@ -54,6 +54,7 @@ try:
         create_grouped_boxplot,
         create_grouped_violin_plot,
         create_grouped_boxen_plot,
+        create_forest_plot,
         calculate_statistics,
         calculate_improvement
     )
@@ -181,7 +182,10 @@ def get_default_config():
                 "대기시간": ["public_waiting_time_seconds", "drt_waiting_time_seconds"],
                 "총 이동시간": ["public_total_time_seconds", "drt_total_trip_time_seconds"]
             },
-            'convert_to_minutes': True
+            'convert_to_minutes': True,
+            'statistical_analysis': True,
+            'alpha': 0.01,
+            'confidence_level': 0.99
         },
         'visualization': {
             'figsize': [15, 8],
@@ -193,7 +197,8 @@ def get_default_config():
             'show_mean': True,
             'show_mean_value': True,
             'clip_percentile': 0.95,
-            'mean_position_strategy': 'adaptive'
+            'mean_position_strategy': 'adaptive',
+            'create_forest_plot': True
         },
         'output': {
             'directory': './output',
@@ -456,7 +461,42 @@ def run_analysis(config):
     print("\n📈 통계 분석 수행 중...")
 
     results = []
+    city_stats_results = {}
+    rural_stats_results = {}
 
+    # 고급 통계 분석 (최적화 모드일 때만)
+    if USE_OPTIMIZED and config['analysis'].get('statistical_analysis', False):
+        print("\n🔬 고급 통계 분석 수행 중...")
+        analyzer = StatisticsAnalyzer(
+            alpha=config['analysis'].get('alpha', 0.01),
+            confidence_level=config['analysis'].get('confidence_level', 0.99)
+        )
+
+        # 도시지역 통계 분석
+        for category, data in city_processed_data.items():
+            if "대중교통" in data.columns and "셔클" in data.columns:
+                result = analyzer.analyze_improvement_effect(
+                    baseline_data=data["대중교통"],
+                    treatment_data=data["셔클"],
+                    baseline_name="대중교통",
+                    treatment_name="셔클"
+                )
+                city_stats_results[category] = result
+
+        # 농어촌지역 통계 분석
+        for category, data in rural_processed_data.items():
+            if "대중교통" in data.columns and "셔클" in data.columns:
+                result = analyzer.analyze_improvement_effect(
+                    baseline_data=data["대중교통"],
+                    treatment_data=data["셔클"],
+                    baseline_name="대중교통",
+                    treatment_name="셔클"
+                )
+                rural_stats_results[category] = result
+
+        print("✅ 고급 통계 분석 완료")
+
+    # 기본 통계 요약
     for region, processed_data in [("도시", city_processed_data), ("농어촌", rural_processed_data)]:
         for category, data in processed_data.items():
             if "대중교통" in data.columns and "셔클" in data.columns:
@@ -488,7 +528,58 @@ def run_analysis(config):
     print("="*60)
     print(results_df.round(2).to_string(index=False))
 
-    # 6. 데이터 파일 저장
+    # 6. Forest Plot 생성 (고급 통계 분석이 수행된 경우)
+    if USE_OPTIMIZED and config['visualization'].get('create_forest_plot', False) and city_stats_results and rural_stats_results:
+        print("\n🌲 Forest Plot 생성 중...")
+
+        try:
+            dpi = config['visualization'].get('dpi', 300)
+            output_format = config['output'].get('format', 'png')
+
+            # 도시지역 Forest Plot
+            fig, ax = create_forest_plot(
+                stats_results=city_stats_results,
+                region_name="도시지역",
+                title="셔클 도입 효과 분석 - Forest Plot",
+                figsize=(14, 8),
+                show_stats=True
+            )
+
+            if config['visualization']['save_plots']:
+                plot_path = output_dir / f"city_forest_plot.{output_format}"
+                fig.savefig(plot_path, dpi=dpi, bbox_inches='tight')
+                print(f"💾 도시지역 Forest Plot 저장: {plot_path}")
+
+            if config['visualization']['show_plots']:
+                plt.show()
+            else:
+                plt.close(fig)
+
+            # 농어촌지역 Forest Plot
+            fig, ax = create_forest_plot(
+                stats_results=rural_stats_results,
+                region_name="농어촌지역",
+                title="셔클 도입 효과 분석 - Forest Plot",
+                figsize=(14, 8),
+                show_stats=True
+            )
+
+            if config['visualization']['save_plots']:
+                plot_path = output_dir / f"rural_forest_plot.{output_format}"
+                fig.savefig(plot_path, dpi=dpi, bbox_inches='tight')
+                print(f"💾 농어촌지역 Forest Plot 저장: {plot_path}")
+
+            if config['visualization']['show_plots']:
+                plt.show()
+            else:
+                plt.close(fig)
+
+            print("✅ Forest Plot 생성 완료")
+
+        except Exception as e:
+            print(f"⚠️ Forest Plot 생성 실패: {e}")
+
+    # 7. 데이터 파일 저장
     print("\n📁 데이터 파일 저장 중...")
 
     # 카테고리명 영어 변환
